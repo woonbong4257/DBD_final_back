@@ -9,42 +9,42 @@ exports.postlogin = async (req, res) => {
     const { id, pw } = req.body.info;
 
     console.log("id: ", id, "pw: ", pw)
-    res.send({id:id, type:"std", msg:"로그인 데이터"})
-    // const [selStdInfo] = await pool.query(
-    //   `SELECT * FROM student WHERE std_id = ? AND pw = ?`,
-    //   [id, pw]
-    // );
+    
+    const [selStdInfo] = await pool.query(
+      `SELECT * FROM student WHERE std_id = ? AND pw = ?`,
+      [id, pw]
+    );
 
-    // if (selStdInfo.length > 0) {
-    //   req.session.user = id;
-    //   req.session.type = "std";
-    //   req.session.save((err) => {
-    //     if (err) {
-    //       console.error("Session:", err);
-    //       return res.status(500).send({msg: "세션 저장 에러"});
-    //     }
-    //     res.status(200).send({type: "std",msg: "로그인 성공"});
-    //   });
-    // } else {
-    //   const [selProfInfo] = await pool.query(
-    //     `SELECT * FROM professor WHERE pro_id = ? AND pw = ?`,
-    //     [id, pw]
-    //   );
+    if (selStdInfo.length > 0) {
+      req.session.user = id;
+      req.session.type = "std";
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session:", err);
+          return res.status(500).send({msg: "세션 저장 에러"});
+        }
+        res.status(200).send({type: "std",msg: "로그인 성공"});
+      });
+    } else {
+      const [selProfInfo] = await pool.query(
+        `SELECT * FROM professor WHERE pro_id = ? AND pw = ?`,
+        [id, pw]
+      );
 
-    //   if (selProfInfo.length > 0) {
-    //     req.session.user = id;
-    //     req.session.type = "prof";
-    //     req.session.save((err) => {
-    //       if (err) {
-    //         console.error("Session:", err);
-    //         return res.status(500).send({msg: "세션 저장 에러"});
-    //       }
-    //       res.status(200).send({type: "prof", msg: "로그인 성공"}); //정상적으로 세션저장이 완료되면 msg를 프론트로 전송
-    //     });
-    //   } else {
-    //     res.status(401).send("세션 없음");
-    //   }
-    // }
+      if (selProfInfo.length > 0) {
+        req.session.user = id;
+        req.session.type = "prof";
+        req.session.save((err) => {
+          if (err) {
+            console.error("Session:", err);
+            return res.status(500).send({msg: "세션 저장 에러"});
+          }
+          res.status(200).send({type: "prof", msg: "로그인 성공"}); //정상적으로 세션저장이 완료되면 msg를 프론트로 전송
+        });
+      } else {
+        res.status(401).send("세션 없음");
+      }
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send("서버를 확인해주세요");
