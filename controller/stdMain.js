@@ -60,7 +60,8 @@ exports.getStdMain = async (req, res) =>{
 
     if (selAccept[0].accept == "수락") {
       const [acceptMission] = await pool.query(`
-        SELECT * FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num WHERE student_std_id = 20200005
+        SELECT * FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num 
+        WHERE student_std_id = 20200005 AND term = '25-1'
         `, [user]);
       response.acceptMission = acceptMission;
     }
