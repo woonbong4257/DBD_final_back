@@ -26,8 +26,8 @@ exports.getMain = async(req, res) =>{
       GROUP BY 
       student_std_id
       ORDER BY 
-    average_compe_figure DESC
-LIMIT 5;
+      average_compe_figure DESC
+      LIMIT 5;
       `)
     res.send({misAcc: selMisAccept, misClear: selMisClear, seedRank: seedRank, programList: programList, compeUp: selCompeUp})
   }

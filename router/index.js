@@ -7,6 +7,7 @@ const profMain = require("../controller/profMain")
 const stdMain = require("../controller/stdMain")
 const mission = require("../controller/mission")
 const hold = require("../controller/hold")
+const profAcc = require("../controller/profAcc")
 
 //메인 라우터
 router.get('/', main.getMain);
@@ -23,5 +24,7 @@ router.post("/mission", mission.postMission)
 
 router.get("/hold", hold.getHold)
 router.post("/hold", hold.postHold)
+
+router.get("/profacc", profAcc.getProfAcc)
 
 module.exports = router;
