@@ -21,7 +21,13 @@ exports.getMain = async(req, res) =>{
       `)
     // 성장치 높은 5명
     const [selCompeUp] = await pool.query(`
-      SELECT name, compe_name, compe_up, term FROM std_compe_up ORDER BY compe_up DESC LIMIT 5
+      SELECT student.name, FLOOR(AVG(compe_figure)) AS average_compe_figure FROM 
+      std_compe inner join student on std_compe.student_std_id = student.std_id
+      GROUP BY 
+      student_std_id
+      ORDER BY 
+    average_compe_figure DESC
+LIMIT 5;
       `)
     res.send({misAcc: selMisAccept, misClear: selMisClear, seedRank: seedRank, programList: programList, compeUp: selCompeUp})
   }

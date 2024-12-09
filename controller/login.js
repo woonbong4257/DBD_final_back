@@ -7,9 +7,6 @@ const pool = require("../DB/db")
 exports.postlogin = async (req, res) => {
   try {
     const { id, pw } = req.body.info;
-
-    console.log("id: ", id, "pw: ", pw)
-    
     const [selStdInfo] = await pool.query(
       `SELECT * FROM student WHERE std_id = ? AND pw = ?`,
       [id, pw]
@@ -21,9 +18,9 @@ exports.postlogin = async (req, res) => {
       req.session.save((err) => {
         if (err) {
           console.error("Session:", err);
-          return res.status(500).send({msg: "세션 저장 에러"});
+          return res.status(500).send({ msg: "세션 저장 에러" });
         }
-        res.status(200).send({type: "std",msg: "로그인 성공"});
+        res.status(200).send({ type: "std", msg: "로그인 성공" });
       });
     } else {
       const [selProfInfo] = await pool.query(
@@ -37,9 +34,9 @@ exports.postlogin = async (req, res) => {
         req.session.save((err) => {
           if (err) {
             console.error("Session:", err);
-            return res.status(500).send({msg: "세션 저장 에러"});
+            return res.status(500).send({ msg: "세션 저장 에러" });
           }
-          res.status(200).send({type: "prof", msg: "로그인 성공"}); //정상적으로 세션저장이 완료되면 msg를 프론트로 전송
+          res.status(200).send({ type: "prof", msg: "로그인 성공" }); //정상적으로 세션저장이 완료되면 msg를 프론트로 전송
         });
       } else {
         res.status(401).send("세션 없음");

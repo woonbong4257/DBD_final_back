@@ -12,7 +12,7 @@ exports.getProfMain = async (req, res) =>{
     const [selHold] = await pool.query(`
       SELECT count(accept) as "hold" FROM mission WHERE professor_pro_id = 101101 AND accept = "보류"
       `)
-    const [selWait] = await pool.query(`
+    const [selWait] = await pool.query(` 
       SELECT count(accept) as "wait" FROM mission WHERE professor_pro_id = 101101 AND accept = "대기"
       `)
     //지도학생 미션 수락률
@@ -49,33 +49,23 @@ exports.getProfMain = async (req, res) =>{
       Math.floor(Number(totalSelfDev[0].self)), 
       Math.floor(Number(totalColla[0].colla))
     ]
-    const [stdCompeUpLead] = await pool.query(`
-      SELECT avg(compe_up) as "lead" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "리더십" AND term = "24-2" AND B.professor_pro_id = 101101
+    const [stdCompeUp] = await pool.query(`
+      SELECT 
+        FLOOR(AVG(CASE WHEN compe_name = '리더십' THEN compe_up END)) as "lead",
+        FLOOR(AVG(CASE WHEN compe_name = '유연성' THEN compe_up END)) as "plia", 
+        FLOOR(AVG(CASE WHEN compe_name = '독창성' THEN compe_up END)) as "orig",
+        FLOOR(AVG(CASE WHEN compe_name = '멘토링' THEN compe_up END)) as "mento",
+        FLOOR(AVG(CASE WHEN compe_name = '자기개발' THEN compe_up END)) as "self",
+        FLOOR(AVG(CASE WHEN compe_name = '협동' THEN compe_up END)) as "colla"
+      FROM std_compe_up A 
+      INNER JOIN student B ON A.std_id = B.std_id 
+      WHERE term = '24-2' 
+      AND B.professor_pro_id = 101101
+    `)
+    const [holdMission] = await pool.query(`
+      SELECT * FROM hold inner join mission on hold.mission_mis_num = mission.mis_num WHERE mission.professor_pro_id = 101101 AND mission.accept = '보류'
       `)
-    const [stdCompeUpPlia] = await pool.query(`
-      SELECT avg(compe_up) as "plia" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "유연성" AND term = "24-2" AND B.professor_pro_id = 101101
-      `)
-    const [stdCompeUpOrig] = await pool.query(`
-      SELECT avg(compe_up) as "orig" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "독창성" AND term = "24-2" AND B.professor_pro_id = 101101
-      `)
-    const [stdCompeUpMento] = await pool.query(`
-      SELECT avg(compe_up) as "mento" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "멘토링" AND term = "24-2" AND B.professor_pro_id = 101101
-      `)
-    const [stdCompeUpSelfDev] = await pool.query(`
-      SELECT avg(compe_up) as "self" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "자기개발" AND term = "24-2" AND B.professor_pro_id = 101101
-      `)
-    const [stdCompeUpColla] = await pool.query(`
-      SELECT avg(compe_up) as "colla" FROM std_compe_up A inner join student B on A.std_id = B.std_id WHERE compe_name = "협동" AND term = "24-2" AND B.professor_pro_id = 101101
-      `)
-    const stdCompeUp = [
-      Math.floor(Number(stdCompeUpLead[0].lead)), 
-      Math.floor(Number(stdCompeUpPlia[0].plia)), 
-      Math.floor(Number(stdCompeUpOrig[0].orig)), 
-      Math.floor(Number(stdCompeUpMento[0].mento)), 
-      Math.floor(Number(stdCompeUpSelfDev[0].self)), 
-      Math.floor(Number(stdCompeUpColla[0].colla))
-    ]
-    res.send({mission: mission, compeUp: compeUp, stdCompeUp: stdCompeUp})
+    res.send({mission: mission, compeUp: compeUp, stdCompeUp: stdCompeUp, holdMission: holdMission})
   }
   catch(err){
     console.error(err)
