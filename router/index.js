@@ -5,6 +5,8 @@ const login = require("../controller/login")
 const logout = require("../controller/logout")
 const profMain = require("../controller/profMain")
 const stdMain = require("../controller/stdMain")
+const mission = require("../controller/mission")
+const hold = require("../controller/hold")
 
 //메인 라우터
 router.get('/', main.getMain);
@@ -16,5 +18,10 @@ router.post("/login", login.postlogin);
 
 router.post("/logout", logout.postLogout)
 
+router.get("/mission", mission.getMission)
+router.post("/mission", mission.postMission)
+
+router.get("/hold", hold.getHold)
+router.post("/hold", hold.postHold)
 
 module.exports = router;
