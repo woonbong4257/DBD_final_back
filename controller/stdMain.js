@@ -45,7 +45,7 @@ exports.getStdMain = async (req, res) =>{
       SELECT * FROM program ORDER BY id DESC LIMIT 5
       `)
     const [selAccept] = await pool.query(`
-      SELECT accept FROM mission WHERE student_std_id = 20200005
+      SELECT accept FROM mission WHERE student_std_id = 20181987
       `, [user])
 
     const response = {
@@ -56,12 +56,13 @@ exports.getStdMain = async (req, res) =>{
       stdProgram: stdProgram,
       programList: programList,
       recommendProgram: recommendProgram,
+      selAccept: selAccept
     };
     // 미션 수락 여부
     if (selAccept[0].accept == "수락") {
       const [acceptMission] = await pool.query(`
-        SELECT * FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num 
-        WHERE student_std_id = 20200005 AND term = '25-1'
+        SELECT compe_name, compe_figure, progress_figure FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num 
+        WHERE student_std_id = 20181987 AND term = '24-1'
         `, [user]);
       response.acceptMission = acceptMission;
     }

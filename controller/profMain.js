@@ -53,9 +53,21 @@ exports.getProfMain = async (req, res) =>{
     `)
 
     const [holdMission] = await pool.query(`
-      SELECT * FROM hold inner join mission on hold.mission_mis_num = mission.mis_num WHERE mission.professor_pro_id = 101101 AND mission.accept = '보류'
+      SELECT hold_num, mission_mis_num, compe_name, compe_figure, hold_figure, hold_date FROM hold inner join mission on hold.mission_mis_num = mission.mis_num 
+      WHERE mission.professor_pro_id = 101101 AND mission.accept = '보류'
       `)
-    res.send({totalCompe: totalCompe, totalCompeUp: totalCompeUp, stdCompeUp: stdCompeUp, holdMission: holdMission})
+    const [holdStd] = await pool.query(`
+      SELECT student.std_id, student.name FROM mission inner join student on mission.student_std_id = student.std_id 
+      WHERE student.professor_pro_id = 101101 AND mission.accept = '보류'
+      `)
+    
+    res.send({
+      totalCompe: totalCompe, 
+      totalCompeUp: totalCompeUp, 
+      stdCompeUp: stdCompeUp, 
+      holdMission: holdMission, 
+      holdStd: holdStd
+    })
   }
   catch(err){
     console.error(err)
