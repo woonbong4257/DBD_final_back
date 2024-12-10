@@ -23,21 +23,17 @@ exports.getStdMain = async (req, res) =>{
     WHERE std_id = 20200005
       `, [user])
     //신청한 프로그램 수 
-    const [appliProgram] = await pool.query(`
-      SELECT COUNT(appli_num) as "appli"
-      FROM program_appli WHERE student_std_id = 20200005
+    const [programStats] = await pool.query(`
+      SELECT 
+        COUNT(appli_num) as "appli",
+        SUM(CASE WHEN progress_state = "이수" THEN 1 ELSE 0 END) as "isu",
+        SUM(CASE WHEN progress_state = "미이수" THEN 1 ELSE 0 END) as "miisu"
+      FROM program_appli 
+      WHERE student_std_id = 20200005
       `, [user])
-    const [isuProgram] = await pool.query(`
-      SELECT COUNT(appli_num) as "isu"
-      FROM program_appli WHERE student_std_id = 20200005 AND progress_state = "이수"
-      `, [user])
-    const [miisuProgram] = await pool.query(`
-      SELECT COUNT(appli_num) as "miisu"
-      FROM program_appli WHERE student_std_id = 20200005 AND progress_state = "미이수"
-      `, [user])
-      const stdProgram = {appli: appliProgram[0].appli, isu: isuProgram[0].isu, miisu: miisuProgram[0].miisu}
+    //추천 프로그램
     const [recommendProgram] = await pool.query(`
-      SELECT * FROM program_appli inner join student ON program_appli.student_std_id = student.std_id 
+      SELECT program.* FROM program_appli inner join student ON program_appli.student_std_id = student.std_id inner join program ON program_appli.program_id = program.id 
       WHERE student.grade = 1 ORDER BY program_appli.appli_num DESC LIMIT 5
       `, [name.grade])
     // 프로그램 불러오기 limit 수치는 나중에 알려주세요
@@ -45,7 +41,7 @@ exports.getStdMain = async (req, res) =>{
       SELECT * FROM program ORDER BY id DESC LIMIT 5
       `)
     const [selAccept] = await pool.query(`
-      SELECT accept FROM mission WHERE student_std_id = 20181987
+      SELECT accept FROM mission WHERE student_std_id = 20181987 AND term = '24-1'
       `, [user])
 
     const response = {
@@ -53,10 +49,10 @@ exports.getStdMain = async (req, res) =>{
       compeUp: selCompeUp,
       totalCompe: selTotalCompe,
       mySeedRank: mySeedRank,
-      stdProgram: stdProgram,
       programList: programList,
       recommendProgram: recommendProgram,
-      selAccept: selAccept
+      selAccept: selAccept,
+      programStats: programStats
     };
     // 미션 수락 여부
     if (selAccept[0].accept == "수락") {
