@@ -16,7 +16,7 @@ exports.getStdMain = async (req, res) =>{
       `, [user])
     //씨앗 순위
     const [mySeedRank] = await pool.query(`
-      SELECT seed, rnk AS "rank", ((rnk - 1) / total_count) * 100 AS percent
+      SELECT seed, rnk AS "rank", FLOOR(((rnk - 1) / total_count) * 100) AS percent
     FROM ( 
     SELECT std_id, seed, RANK() OVER (ORDER BY seed DESC) AS rnk, COUNT(*) OVER () AS total_count 
     FROM student) ranked_students
