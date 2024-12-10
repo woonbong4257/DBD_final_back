@@ -57,7 +57,7 @@ exports.getProfMain = async (req, res) =>{
       WHERE mission.professor_pro_id = 101101 AND mission.accept = '보류'
       `)
     const [holdStd] = await pool.query(`
-      SELECT student.std_id, student.name FROM mission inner join student on mission.student_std_id = student.std_id 
+      SELECT student.std_id, student.name student.grade FROM mission inner join student on mission.student_std_id = student.std_id 
       WHERE student.professor_pro_id = 101101 AND mission.accept = '보류'
       `)
     
