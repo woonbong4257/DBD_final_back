@@ -16,7 +16,7 @@ exports.getStdMain = async (req, res) =>{
       `, [user])
     //씨앗 순위
     const [mySeedRank] = await pool.query(`
-      SELECT seed, rnk AS "rank", (1 - (rnk - 1) / total_count) * 100 AS percent
+      SELECT seed, rnk AS "rank", ((rnk - 1) / total_count) * 100 AS percent
     FROM ( 
     SELECT std_id, seed, RANK() OVER (ORDER BY seed DESC) AS rnk, COUNT(*) OVER () AS total_count 
     FROM student) ranked_students
@@ -57,7 +57,7 @@ exports.getStdMain = async (req, res) =>{
       programList: programList,
       recommendProgram: recommendProgram,
     };
-
+    // 미션 수락 여부
     if (selAccept[0].accept == "수락") {
       const [acceptMission] = await pool.query(`
         SELECT * FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num 
