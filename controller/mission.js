@@ -1,5 +1,5 @@
 const pool = require("../DB/db")
-
+//학생  마이페이지임 
 exports.getMission = async (req, res) => {
   try{
     const user = req.session.user

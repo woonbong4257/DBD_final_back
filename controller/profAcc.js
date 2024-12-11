@@ -22,6 +22,22 @@ exports.getProfAcc = async (req, res) => {
 exports.postProfAcc = async (req, res) => {
   try{
     const user = req.session.user
+    const {std_id} = req.body
+
+    const [stdCompe] = await pool.query(`
+      SELECT 
+        compe_name,
+        compe_figure
+      FROM std_compe
+      WHERE std_id = ${std_id}
+    `)
+    const [stdCompeUp] = await pool.query(`
+      SELECT
+        compe_up
+      FROM std_compe_up
+      WHERE std_id = ${std_id} AND term = '24-2'
+    `)
+    res.send({stdCompe: stdCompe, stdCompeUp: stdCompeUp})
   }
   catch(err){
     console.error(err)
