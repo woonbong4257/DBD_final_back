@@ -29,11 +29,11 @@ exports.postProfAcc = async (req, res) => {
         compe_name,
         compe_figure
       FROM std_compe
-      WHERE std_id = ${std_id}
+      WHERE student_std_id = ${std_id}
     `)
     const [stdCompeUp] = await pool.query(`
       SELECT
-        compe_up
+      compe_up
       FROM std_compe_up
       WHERE std_id = ${std_id} AND term = '24-2'
     `)

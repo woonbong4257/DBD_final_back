@@ -26,5 +26,5 @@ router.get("/hold", hold.getHold)
 router.post("/hold", hold.postHold)
 
 router.get("/profacc", profAcc.getProfAcc)
-
+router.post("/profacc", profAcc.postProfAcc)
 module.exports = router;
