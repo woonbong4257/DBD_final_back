@@ -3,6 +3,7 @@ const pool = require('../DB/db')
 exports.getHold = async (req, res) => {
   try{
     const user = req.session.user
+  // 그냥 케이스 구문 사용시 널값까지 같이 들어옴
     const [compe] = await pool.query(`
       SELECT 
         FLOOR(AVG(CASE WHEN compe_name = '리더십' THEN compe_figure END)) as "lead",
