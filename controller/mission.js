@@ -22,7 +22,7 @@ exports.getMission = async (req, res) => {
   const [mission] = await pool.query(`
     SELECT mis_num, accept, final_date FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
     `, [user])
-    if(mission[0].accept == '보류'){
+    if(mission[0].accept != '보류'){
       const [missionCompe] = await pool.query(`
         SELECT * FROM mission_compe WHERE mission_mis_num = ?
         `, [mission[0].mis_num])
