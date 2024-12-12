@@ -43,26 +43,27 @@ exports.getMission = async (req, res) => {
 exports.postMission = async (req, res) => {
   try{  
     const user = req.session.user
+    console.log(req.body)
     const {type}= req.body
-    const [mission] = await pool.query(`
-      SELECT mis_num FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
-      `, [user])
-    if(type == '수락'){
-      const [acceptState] = await pool.query(`
-        UPDATE mission SET accept = '수락' WHERE student_std_id = '20200005' AND term = '25-1'
-        `, [user])
-      const [missionCompe] = await pool.query(`
-        UPDATE mission_compe SET progress_figure = 0 WHERE mission_mis_num = ?
-        `, [mission[0].mis_num])
-    }
-    else{
-      const [rejectState] = await pool.query(`
-        UPDATE mission SET accept = '거절' WHERE student_std_id = '20200005' AND term = '25-1'
-        `, [user])
-      const [missionCompe] = await pool.query(`
-        UPDATE mission_compe SET progress_figure = 0 WHERE mission_mis_num = ?
-        `, [mission[0].mis_num])
-    }
+    // const [mission] = await pool.query(`
+    //   SELECT mis_num FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
+    //   `, [user])
+    // if(type == '수락'){
+    //   const [acceptState] = await pool.query(`
+    //     UPDATE mission SET accept = '수락' WHERE student_std_id = '20200005' AND term = '25-1'
+    //     `, [user])
+    //   const [missionCompe] = await pool.query(`
+    //     UPDATE mission_compe SET progress_figure = 0 WHERE mission_mis_num = ?
+    //     `, [mission[0].mis_num])
+    // }
+    // else{
+    //   const [rejectState] = await pool.query(`
+    //     UPDATE mission SET accept = '거절' WHERE student_std_id = '20200005' AND term = '25-1'
+    //     `, [user])
+    //   const [missionCompe] = await pool.query(`
+    //     UPDATE mission_compe SET progress_figure = 0 WHERE mission_mis_num = ?
+    //     `, [mission[0].mis_num])
+    // }
   }
   catch(err){
     console.error(err)
