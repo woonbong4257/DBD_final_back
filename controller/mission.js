@@ -45,7 +45,7 @@ exports.postMission = async (req, res) => {
     const user = req.session.user
     const {type}= req.body
     const [mission] = await pool.query(`
-      SELECT * FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
+      SELECT mis_num FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
       `, [user])
     if(type == '수락'){
       const [acceptState] = await pool.query(`

@@ -11,6 +11,7 @@ const profAcc = require("../controller/profAcc")
 const profHoldAcc = require("../controller/profHoldAcc")
 const program = require("../controller/program")
 const programApli = require("../controller/programApli")
+const missionProgram = require("../controller/missionProgram")
 
 //메인 라우터
 router.get('/', main.getMain);
@@ -35,4 +36,5 @@ router.post("/profholdacc", profHoldAcc.postProfHoldAcc)
 
 router.get("/program", program.getProgram)
 router.get("/programApli", programApli.getProgramApli)
+router.post("/programApli", programApli.postProgramApli)
 module.exports = router;
