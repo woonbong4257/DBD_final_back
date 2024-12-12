@@ -13,11 +13,11 @@ exports.getMission = async (req, res) => {
     SELECT compe_name, compe_up FROM std_compe_up WHERE std_id = '20200005' AND term = '24-2'
     `, [user])
   const [pastMission] = await pool.query(`
-    SELECT term, accept, final_accept, SUM(compe_figure) as total, progress_date, SUM(progress_figure), final_date as progress , mis_state, seed 
+    SELECT term, accept, final_accept, SUM(compe_figure) as total, progress_date, SUM(progress_figure) as progress, final_date, mis_state, seed 
     FROM mission 
     INNER JOIN mission_compe ON mission.mis_num = mission_compe.mission_mis_num 
     WHERE student_std_id = '20200005' AND term != '25-1'
-    GROUP BY term, accept, final_accept, progress_date, mis_state, seed
+    GROUP BY term, accept, final_accept, progress_date, final_date, mis_state, seed
     `, [user])
   const [mission] = await pool.query(`
     SELECT mis_num, accept, final_date FROM mission WHERE student_std_id = '20200005' AND term = '25-1'
