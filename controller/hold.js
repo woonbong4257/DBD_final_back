@@ -27,13 +27,18 @@ exports.getHold = async (req, res) => {
 //역량명 안넘어옴
 exports.postHold = async (req, res) => {
   try{
-    console.log(req.body)
-  //   const user = req.session.user
-  //   const {scores} = req.body
-  // const [hold] = await pool.query(`
-  //   UPDATE hold SET scores = ? WHERE std_id = ?
-  //   `, [scores, user])
-  // res.send({hold: hold})
+    const user = req.session.user
+    console.log(user)
+    const {compe_figure, mis_num} = req.body
+    for(let i = 0; i < compe_figure.length; i++){
+      const [insertHold] = await pool.query(`
+        INSERT INTO hold VALUES (null,'25-1', ?, 10,?, now(), ?, ?)
+        `, [compe_figure[i].compe_name, compe_figure[i].compe_score, user, mis_num[0].mis_num])
+    }
+    const [updateAccept] = await pool.query(`
+      UPDATE mission SET accept = '보류' WHERE mis_num = ?
+    `, [mis_num[0].mis_num])
+    res.send({msg: 'ok'})
   }
   catch(err){
     console.error(err)
