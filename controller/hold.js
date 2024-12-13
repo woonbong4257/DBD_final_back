@@ -23,9 +23,17 @@ exports.getHold = async (req, res) => {
   }
 }
 
+
+//역량명 안넘어옴
 exports.postHold = async (req, res) => {
   try{
-
+    console.log(req.body)
+  //   const user = req.session.user
+  //   const {scores} = req.body
+  // const [hold] = await pool.query(`
+  //   UPDATE hold SET scores = ? WHERE std_id = ?
+  //   `, [scores, user])
+  // res.send({hold: hold})
   }
   catch(err){
     console.error(err)

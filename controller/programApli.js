@@ -24,6 +24,15 @@ exports.postProgramApli = async (req, res) => {
     const [programAppli] = await pool.query(`
       INSERT INTO program_appli VALUES (null, now(), "진행", null, ?, ?, ?, ?)
     `, [compe_name, program_name, program_id, user])
+    const [selectRecently] = await pool.query(`
+      SELECT std_state FROM student WHERE std_id = ?
+    `, [user])
+    if(selectRecently[0].std_state === '휴면'){
+      const [updateRecently] = await pool.query(`
+        UPDATE student SET recently = now(), std_state = '복귀' WHERE std_id = ?
+      `, [user])
+      
+    }
     res.send({message: "신청 완료"})
   }
   catch(err){

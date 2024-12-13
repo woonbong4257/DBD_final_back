@@ -11,6 +11,12 @@ exports.postlogin = async (req, res) => {
       `SELECT * FROM student WHERE std_id = ? AND pw = ?`,
       [id, pw]
     );
+    console.log(selStdInfo.length, "최봉준")
+    const [selProfInfo] = await pool.query(
+        `SELECT * FROM professor WHERE pro_id = ? AND pw = ?`,
+        [id, pw]
+    );
+    console.log(selProfInfo.length, "최봉준")
 
     if (selStdInfo.length > 0) {
       req.session.user = id;
@@ -19,29 +25,27 @@ exports.postlogin = async (req, res) => {
         if (err) {
           console.error("Session:", err);
           return res.status(500).send({ msg: "세션 저장 에러" });
+        } else {
+          console.log("여기옴")
+          res.status(200).send({ type: "std", msg: "로그인 성공" });
         }
-        res.status(200).send({ type: "std", msg: "로그인 성공" });
+      });
+    }
+    if (selProfInfo.length > 0) {
+      req.session.user = id;
+      req.session.type = "prof";
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session:", err);
+          return res.status(500).send({ msg: "세션 저장 에러" });
+        } else {
+          res.status(200).send({ type: "prof", msg: "로그인 성공" });
+        }
       });
     } else {
-      const [selProfInfo] = await pool.query(
-        `SELECT * FROM professor WHERE pro_id = ? AND pw = ?`,
-        [id, pw]
-      );
-
-      if (selProfInfo.length > 0) {
-        req.session.user = id;
-        req.session.type = "prof";
-        req.session.save((err) => {
-          if (err) {
-            console.error("Session:", err);
-            return res.status(500).send({ msg: "세션 저장 에러" });
-          }
-          res.status(200).send({ type: "prof", msg: "로그인 성공" }); //정상적으로 세션저장이 완료되면 msg를 프론트로 전송
-        });
-      } else {
-        res.status(401).send("세션 없음");
-      }
+      // res.status(401).send("세션 없음");
     }
+  
   } catch (err) {
     console.error(err);
     res.status(500).send("서버를 확인해주세요");
