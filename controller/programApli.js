@@ -19,6 +19,7 @@ exports.getProgramApli = async (req, res) => {
 exports.postProgramApli = async (req, res) => {
   try{
     const user = req.session.user
+    console.log(user)
     console.log(req.body)
     const {program_id,program_name, compe_name} = req.body
     const [programAppli] = await pool.query(`

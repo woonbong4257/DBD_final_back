@@ -38,6 +38,6 @@ router.get("/program", program.getProgram)
 router.get("/programApli", programApli.getProgramApli)
 router.post("/programApli", programApli.postProgramApli)
 
-router.get("/missionprogram", missionProgram.postMissionProgram)
+router.post("/missionprogram", missionProgram.postMissionProgram)
 
 module.exports = router;
