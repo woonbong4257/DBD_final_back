@@ -17,6 +17,13 @@ exports.postProfHoldAcc = async (req, res) => {
         const [updateHoldCompe] = await pool.query(`
           UPDATE hold SET hold_figure = ? WHERE mission_mis_num = ? AND compe_name = ?
         `, [compe[i].hold_figure, mis_num, compe[i].compe_name]);
+        
+        ///////////////////////
+        const [updateAccept] = await pool.query(`
+          UPDATE mission SET accept = "대기" WHERE mis_num = ?
+        `, [mis_num]); 
+        ////////////////////// 
+        // 얘 넣어야함 없으니까 개별 조정이 안됨
       }
     } else {
     // 전체 조정

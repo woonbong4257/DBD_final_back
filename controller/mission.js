@@ -53,12 +53,14 @@ exports.postMission = async (req, res) => {
         UPDATE mission_compe SET progress_figure = 0 WHERE mission_mis_num = ?
         `, [mis_num])
         console.log("수락")
+        res.status(200).json({ message: "미션 상태 변경 성공" });
     }
     else{
       const [rejectState] = await pool.query(`
         UPDATE mission SET accept = '거절' , mis_state = '실패', final_accept = now() WHERE term = '25-1' AND mis_num = ?
         `, [mis_num])
         console.log("거절")
+        res.status(200).json({ message: "미션 상태 변경 성공" });
     }
   }
   catch(err){
