@@ -22,6 +22,10 @@ exports.getMission = async (req, res) => {
   const [mission] = await pool.query(`
     SELECT mis_num, accept, final_date FROM mission WHERE student_std_id = ? AND term = '25-1'
     `, [user])
+    const [checkHold] = await pool.query(`
+      SELECT * FROM hold WHERE mission_mis_num = ?
+      `, [mission[0].mis_num])
+      console.log(checkHold)
     if(mission.length > 0 && mission[0].accept !== '보류'){
       const [missionCompe] = await pool.query(`
         SELECT * FROM mission_compe WHERE mission_mis_num = ?
@@ -29,7 +33,12 @@ exports.getMission = async (req, res) => {
       const [missionTotal] = await pool.query(`
         SELECT SUM(compe_figure) as total FROM mission_compe WHERE mission_mis_num = ?
         `, [mission[0].mis_num])
-      res.send({stdInfo: stdInfo, stdCompe: stdCompe, stdCompeUp: stdCompeUp, pastMission: pastMission, mission: mission, missionCompe: missionCompe,  missionTotal: missionTotal})
+        if(checkHold.length > 0){
+          res.send({stdInfo: stdInfo, stdCompe: stdCompe, stdCompeUp: stdCompeUp, pastMission: pastMission, mission: mission, missionCompe: missionCompe,  missionTotal: missionTotal, hold: "보류한적 있음"})
+        }
+        else{
+          res.send({stdInfo: stdInfo, stdCompe: stdCompe, stdCompeUp: stdCompeUp, pastMission: pastMission, mission: mission, missionCompe: missionCompe,  missionTotal: missionTotal, hold: "보류한적 없음"})
+        }
     }
     else{
       res.send({stdInfo: stdInfo, stdCompe: stdCompe, stdCompeUp: stdCompeUp, pastMission: pastMission, mission: mission, missionCompe: "보류"})
