@@ -41,8 +41,10 @@ exports.postProgramApli = async (req, res) => {
       const [updateSeed] = await pool.query(`
         UPDATE student SET seed = ? WHERE std_id = ?
       `, [Number(selectSeed[0].total), user])
-      
     }
+    const [updateRecently] = await pool.query(`
+      UPDATE student SET recently = now() WHERE std_id = ?
+    `, [user])
     res.send({message: "신청 완료"})
   }
   catch(err){
