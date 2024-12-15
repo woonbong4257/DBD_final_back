@@ -5,10 +5,10 @@ exports.getMain = async(req, res) =>{
     //미션 수락률 update_time은 갱신 날짜
     const [selMisAccept] = await pool.query(`
       SELECT term, update_time, state, std_num 
-      FROM mission_accept WHERE term = '24-2'`)
+      FROM mission_accept WHERE term = '25-1'`)
     //미션 이수율
     const [selMisClear] = await pool.query(`
-      SELECT term, isu_state, std_num FROM mission_clear WHERE term = '24-1'
+      SELECT term, isu_state, std_num FROM mission_clear WHERE term = '24-2'
       `)
     //씨앗 많은 5명
     const [seedRank] = await pool.query(`

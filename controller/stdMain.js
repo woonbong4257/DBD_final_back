@@ -55,8 +55,8 @@ exports.getStdMain = async (req, res) =>{
       selAccept: selAccept,
       programStats: programStats
     };
-    // 미션 수락 여부
-    if (selAccept.accept == "수락") {
+    // 미션 수락 여부 
+    if (selAccept[0].accept == "수락") {
       const [acceptMission] = await pool.query(`
         SELECT compe_name, compe_figure, progress_figure FROM mission_compe inner join mission ON mission_compe.mission_mis_num = mission.mis_num 
         WHERE student_std_id = ? AND term = '25-1'
