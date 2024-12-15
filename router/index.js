@@ -12,7 +12,7 @@ const profHoldAcc = require("../controller/profHoldAcc")
 const program = require("../controller/program")
 const programApli = require("../controller/programApli")
 const missionProgram = require("../controller/missionProgram")
-
+const seedList = require("../controller/seedList")
 //메인 라우터
 router.get('/', main.getMain);
 router.get('/stdmain', stdMain.getStdMain)
@@ -39,5 +39,7 @@ router.get("/programApli", programApli.getProgramApli)
 router.post("/programApli", programApli.postProgramApli)
 
 router.post("/missionprogram", missionProgram.postMissionProgram)
+
+router.get("/seedList", seedList.getSeedList)
 
 module.exports = router;
