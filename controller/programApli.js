@@ -35,6 +35,12 @@ exports.postProgramApli = async (req, res) => {
       const [insertSeed] = await pool.query(`
         INSERT INTO seed_list VALUES (null, '복귀 프로그램 신청', 1,now(),"복귀", ?)
       `, [user])
+      const [selectSeed] = await pool.query(` 
+        SELECT SUM(get_point) as total FROM seed_list WHERE std_id = ?
+      `, [user])
+      const [updateSeed] = await pool.query(`
+        UPDATE student SET seed = ? WHERE std_id = ?
+      `, [Number(selectSeed[0].total), user])
       
     }
     res.send({message: "신청 완료"})
